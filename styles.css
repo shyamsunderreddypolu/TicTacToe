@@ -1,0 +1,662 @@
+/* ==========================================================================
+   Tic-Tac-Toe Theme Variables & Global Reset
+   ========================================================================== */
+
+:root {
+    /* Dark Theme Palette (Default) */
+    --bg-app: hsl(222, 47%, 11%);
+    --bg-card: hsl(217, 33%, 17%);
+    --bg-card-hover: hsl(215, 25%, 27%);
+    --text-main: hsl(210, 40%, 96%);
+    --text-muted: hsl(215, 20%, 65%);
+    --border-color: hsl(217, 20%, 25%);
+    
+    /* Accents (Recruiter-friendly, non-generic) */
+    --accent-x: hsl(199, 89%, 48%);       /* Sky Blue */
+    --accent-x-glow: hsla(199, 89%, 48%, 0.25);
+    --accent-o: hsl(340, 82%, 52%);       /* Rose Red */
+    --accent-o-glow: hsla(340, 82%, 52%, 0.25);
+    --accent-draw: hsl(45, 93%, 47%);     /* Warm Amber */
+    
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
+    
+    --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --transition-speed: 0.3s;
+}
+
+[data-theme="light"] {
+    /* Light Theme Palette */
+    --bg-app: hsl(210, 40%, 96%);
+    --bg-card: hsl(0, 0%, 100%);
+    --bg-card-hover: hsl(210, 40%, 94%);
+    --text-main: hsl(222, 47%, 11%);
+    --text-muted: hsl(215, 16%, 47%);
+    --border-color: hsl(214, 32%, 91%);
+    
+    --accent-x: hsl(201, 96%, 32%);       /* Ocean Blue */
+    --accent-x-glow: hsla(201, 96%, 32%, 0.15);
+    --accent-o: hsl(343, 85%, 44%);       /* Crimson O */
+    --accent-o-glow: hsla(343, 85%, 44%, 0.15);
+    
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-app);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+    overflow-x: hidden;
+}
+
+/* ==========================================================================
+   Layout Containers
+   ========================================================================== */
+
+.app-container {
+    width: 100%;
+    max-width: 1100px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Header */
+.game-header {
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 16px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand {
+    display: flex;
+    flex-direction: column;
+}
+
+.badge {
+    align-self: flex-start;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    background: linear-gradient(135deg, var(--accent-x), var(--accent-o));
+    color: white;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    margin-bottom: 6px;
+    box-shadow: var(--shadow-sm);
+}
+
+.game-header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+}
+
+.game-header h1 span {
+    background: linear-gradient(135deg, var(--accent-x), var(--accent-o));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-top: 8px;
+    max-width: 600px;
+}
+
+.header-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.icon-btn {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all var(--transition-speed) ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.icon-btn:hover {
+    background-color: var(--bg-card-hover);
+    transform: translateY(-2px);
+    border-color: var(--text-muted);
+}
+
+.icon-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2;
+}
+
+/* ==========================================================================
+   Main Grid Layout
+   ========================================================================== */
+
+.game-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr 280px;
+    gap: 24px;
+    align-items: start;
+}
+
+@media (max-width: 960px) {
+    .game-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .side-panel {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .side-panel {
+        grid-template-columns: 1fr;
+    }
+    .game-header h1 {
+        font-size: 1.8rem;
+    }
+}
+
+/* ==========================================================================
+   Card Elements & Sidebar
+   ========================================================================== */
+
+.card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: var(--shadow-md);
+    transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+}
+
+.card h2 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+}
+
+/* Settings Form Control */
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.control-group:last-child {
+    margin-bottom: 0;
+}
+
+.control-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.styled-select {
+    background-color: var(--bg-app);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.styled-select:focus {
+    border-color: var(--accent-x);
+    box-shadow: 0 0 0 2px var(--accent-x-glow);
+}
+
+/* Scoreboard */
+.scoreboard {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.score-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: 10px;
+    background-color: var(--bg-app);
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.score-item:hover {
+    transform: translateX(4px);
+}
+
+.player-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.score-val {
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+.x-score {
+    border-left: 4px solid var(--accent-x);
+}
+.x-score .player-label { color: var(--accent-x); }
+
+.o-score {
+    border-left: 4px solid var(--accent-o);
+}
+.o-score .player-label { color: var(--accent-o); }
+
+.draw-score {
+    border-left: 4px solid var(--text-muted);
+}
+.draw-score .player-label { color: var(--text-muted); }
+
+/* Scoreboard active highlight */
+.score-active {
+    background-color: var(--bg-card-hover);
+    border-color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Center Panel: Board Area
+   ========================================================================== */
+
+.board-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.game-status {
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-align: center;
+    min-height: 32px;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.game-status.turn-x {
+    color: var(--accent-x);
+}
+
+.game-status.turn-o {
+    color: var(--accent-o);
+}
+
+.game-status.win-x {
+    color: var(--accent-x);
+    font-size: 1.6rem;
+    text-shadow: 0 0 15px var(--accent-x-glow);
+}
+
+.game-status.win-o {
+    color: var(--accent-o);
+    font-size: 1.6rem;
+    text-shadow: 0 0 15px var(--accent-o-glow);
+}
+
+.game-status.draw {
+    color: var(--accent-draw);
+    font-size: 1.5rem;
+}
+
+/* Grid Design */
+.board-wrapper {
+    position: relative;
+    padding: 10px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    box-shadow: var(--shadow-lg);
+}
+
+.board-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 12px;
+    background-color: transparent;
+}
+
+@media (min-width: 480px) {
+    .board-grid {
+        grid-template-columns: repeat(3, 120px);
+        grid-template-rows: repeat(3, 120px);
+    }
+}
+
+.cell {
+    background-color: var(--bg-app);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 3rem;
+    font-weight: 800;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Hover effects */
+.cell:hover:not(:disabled) {
+    background-color: var(--bg-card-hover);
+    transform: scale(1.03);
+    border-color: var(--text-muted);
+}
+
+/* Focus indicator for keyboard navigators */
+.cell:focus-visible {
+    border-color: var(--accent-x);
+    box-shadow: 0 0 0 4px var(--accent-x-glow);
+}
+
+.cell:disabled {
+    cursor: not-allowed;
+}
+
+/* Cell content styling */
+.cell[data-player="X"] {
+    color: var(--accent-x);
+    text-shadow: 0 0 10px var(--accent-x-glow);
+    animation: bounceIn 0.35s ease;
+}
+
+.cell[data-player="O"] {
+    color: var(--accent-o);
+    text-shadow: 0 0 10px var(--accent-o-glow);
+    animation: bounceIn 0.35s ease;
+}
+
+/* Animations */
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.3);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* SVG Line overlay for winning match */
+.winning-line-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+#winning-line {
+    transition: stroke-dashoffset 0.5s ease-out;
+}
+
+/* Bottom Game Board Control Buttons */
+.board-controls {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.btn {
+    flex: 1;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 12px 24px;
+    border-radius: 12px;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn svg {
+    transition: transform var(--transition-speed) ease;
+}
+
+.btn:hover svg {
+    transform: rotate(-45deg);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent-x), var(--accent-x));
+    color: white;
+}
+
+[data-theme="dark"] .btn-primary {
+    background: linear-gradient(135deg, hsl(199, 89%, 48%), hsl(200, 95%, 43%));
+}
+
+.btn-primary:hover {
+    filter: brightness(1.15);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--accent-x-glow);
+}
+
+.btn-secondary {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+}
+
+.btn-secondary:hover {
+    background-color: var(--bg-card-hover);
+    transform: translateY(-2px);
+    border-color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Match History Log Pane
+   ========================================================================== */
+
+.log-container {
+    height: 180px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-right: 4px;
+}
+
+/* Scrollbar styling */
+.log-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.log-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.log-container::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 999px;
+}
+
+.log-empty-msg {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 60px;
+    font-style: italic;
+}
+
+.log-entry {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background-color: var(--bg-app);
+    border: 1px solid var(--border-color);
+    line-height: 1.4;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.log-entry.x-action {
+    border-left: 3px solid var(--accent-x);
+}
+.log-entry.o-action {
+    border-left: 3px solid var(--accent-o);
+}
+.log-entry.sys-action {
+    border-left: 3px solid var(--text-muted);
+    font-weight: 600;
+}
+
+.log-time {
+    color: var(--text-muted);
+    font-size: 0.7rem;
+}
+
+/* Highlights Info Pane */
+.highlights-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.highlights-list li {
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+.highlights-list li strong {
+    display: block;
+    color: var(--text-main);
+    font-size: 0.85rem;
+    margin-bottom: 2px;
+}
+
+.highlights-list li p {
+    color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.app-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border-color);
+    padding-top: 16px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.footer-links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+    color: var(--accent-x);
+}
+
+.separator {
+    color: var(--border-color);
+}
+
+.java-icon {
+    width: 14px;
+    height: 14px;
+}
