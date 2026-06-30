@@ -311,11 +311,6 @@ class TicTacToeGame {
             }
         }
 
-        // Lock user from making a move if the AI is currently calculating
-        if (this.gameMode === 'ai' && this.currentPlayer === 'O') {
-            return;
-        }
-
         synth.playClick();
         this.makeMove(targetIndex, this.currentPlayer);
 
