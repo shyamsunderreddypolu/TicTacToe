@@ -4,7 +4,7 @@ I wanted to build something fun to help me practice my coding skills. I started 
 
 This repository is my playground where I compared how the game behaves when written in standard Java versus running in a modern web browser, and where I experimented with different coding concepts.
 
-👉 **[Try out the live Web version here!](https://shyamsunderreddypolu.github.io/TicTacToe/)** *(Replace with your GitHub Pages link)*
+👉 **[Try out the live Web version here!](https://tic-tac-toe-sigma-three-54.vercel.app/)**
 
 ---
 
