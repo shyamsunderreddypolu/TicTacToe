@@ -254,6 +254,65 @@ body {
     box-shadow: 0 0 0 2px var(--accent-x-glow);
 }
 
+/* Custom Checkbox Styling */
+.check-group {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    user-select: none;
+    transition: color 0.2s ease;
+}
+
+.checkbox-container input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
+    outline: none;
+    background-color: var(--bg-app);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.checkbox-container input[type="checkbox"]:checked {
+    background-color: var(--accent-x);
+    border-color: var(--accent-x);
+}
+
+.checkbox-container input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 5px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.checkbox-container input[type="checkbox"]:focus-visible {
+    border-color: var(--accent-x);
+    box-shadow: 0 0 0 3px var(--accent-x-glow);
+}
+
+.checkbox-container:hover {
+    color: var(--text-main);
+}
+
 /* Scoreboard */
 .scoreboard {
     display: flex;
